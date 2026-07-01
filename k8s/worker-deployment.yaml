@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      containers:
+      - name: worker
+        image: jobqueue-worker:latest
+        imagePullPolicy: Never
+        env:
+        - name: REDIS_HOST
+          value: redis
+        command: ["python", "-m", "worker.worker"]
